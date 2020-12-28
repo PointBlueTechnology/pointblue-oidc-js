@@ -50,6 +50,7 @@
     "eslint": "^7.7.0",
     "eslint-plugin-jest": "^23.20.0",
     "jest": "^26.4.2",
+    "lodash-es": "^4.17.20",
     "rimraf": "^3.0.2",
     "rollup": "^2.35.1",
     "rollup-plugin-terser": "^7.0.2",
@@ -73,7 +74,6 @@
     ]
   },
   "dependencies": {
-    "@okta/okta-auth-js": "^4.0.0",
-    "lodash-es": "^4.17.15"
+    "@okta/okta-auth-js": "^4.0.0"
   }
 }
