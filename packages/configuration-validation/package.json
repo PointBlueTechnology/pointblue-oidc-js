@@ -1,7 +1,7 @@
 {
-  "name": "@okta/configuration-validation",
+  "name": "@pointblue/configuration-validation",
   "version": "1.0.0",
-  "description": "Configuration validation support for Okta JavaScript SDKs",
+  "description": "Configuration validation support for JavaScript SDKs",
   "main": "./dist/lib.js",
   "types": "./dist/lib.d.ts",
   "files": [
@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/okta/okta-oidc-js.git"
+    "url": "git+https://github.com/PointBlueTechnology/pointblue-oidc-js.git""
   },
   "keywords": [
     "okta",
@@ -30,9 +30,9 @@
   ],
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/okta/okta-oidc-js/issues"
+    "url": "https://github.com/PointBlueTechnology/pointblue-oidc-js/issues"
   },
-  "homepage": "https://github.com/okta/okta-oidc-js#readme",
+  "homepage": "https://github.com/PointBlueTechnology/pointblue-oidc-js#readme",
   "devDependencies": {
     "@babel/core": "^7.8.0",
     "@babel/plugin-transform-typescript": "^7.11.0",
@@ -54,7 +54,7 @@
   },
   "jest": {
     "moduleNameMapper": {
-      "^@okta/configuration-validation$": "<rootDir>/src/lib"
+      "^@pointblue/configuration-validation$": "<rootDir>/src/lib"
     },
     "restoreMocks": true,
     "testEnvironment": "jsdom",
