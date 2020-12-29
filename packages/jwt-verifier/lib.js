@@ -1,6 +1,7 @@
 /*!
+ * Modifications copyright (c) 2020 Pointblue Technology LLC.
  * Copyright (c) 2017-Present, Okta, Inc. and/or its affiliates. All rights reserved.
- * The Okta software accompanied by this notice is provided pursuant to the Apache License, Version 2.0 (the "License.")
+ * The \ software accompanied by this notice is provided pursuant to the Apache License, Version 2.0 (the "License.")
  *
  * You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
  * Unless required by applicable law or agreed to in writing, software
@@ -10,13 +11,13 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-const jwksClient = require('jwks-rsa');
-const nJwt = require('njwt');
+const jwksClient = require("jwks-rsa");
+const nJwt = require("njwt");
 
 const {
   assertIssuer,
-  assertClientId
-} = require('@okta/configuration-validation');
+  assertClientId,
+} = require("@pointblue/configuration-validation");
 
 class AssertedClaimsVerifier {
   constructor() {
@@ -24,7 +25,7 @@ class AssertedClaimsVerifier {
   }
 
   extractOperator(claim) {
-    const idx = claim.indexOf('.');
+    const idx = claim.indexOf(".");
     if (idx >= 0) {
       return claim.substring(idx + 1);
     }
@@ -32,7 +33,7 @@ class AssertedClaimsVerifier {
   }
 
   extractClaim(claim) {
-    const idx = claim.indexOf('.');
+    const idx = claim.indexOf(".");
     if (idx >= 0) {
       return claim.substring(0, idx);
     }
@@ -41,83 +42,112 @@ class AssertedClaimsVerifier {
 
   isValidOperator(operator) {
     // may support more operators in the future
-    return !operator || operator === 'includes'
+    return !operator || operator === "includes";
   }
 
   checkAssertions(op, claim, expectedValue, actualValue) {
     if (!op && actualValue !== expectedValue) {
-      this.errors.push(`claim '${claim}' value '${actualValue}' does not match expected value '${expectedValue}'`);
-    } else if (op === 'includes' && Array.isArray(expectedValue)) {
-      expectedValue.forEach(value => {
+      this.errors.push(
+        `claim '${claim}' value '${actualValue}' does not match expected value '${expectedValue}'`
+      );
+    } else if (op === "includes" && Array.isArray(expectedValue)) {
+      expectedValue.forEach((value) => {
         if (!actualValue || !actualValue.includes(value)) {
-          this.errors.push(`claim '${claim}' value '${actualValue}' does not include expected value '${value}'`);
+          this.errors.push(
+            `claim '${claim}' value '${actualValue}' does not include expected value '${value}'`
+          );
         }
-      })
-    } else if (op === 'includes' && (!actualValue || !actualValue.includes(expectedValue))) {
-      this.errors.push(`claim '${claim}' value '${actualValue}' does not include expected value '${expectedValue}'`);
+      });
+    } else if (
+      op === "includes" &&
+      (!actualValue || !actualValue.includes(expectedValue))
+    ) {
+      this.errors.push(
+        `claim '${claim}' value '${actualValue}' does not include expected value '${expectedValue}'`
+      );
     }
   }
 }
 
 function verifyAssertedClaims(verifier, claims) {
   const assertedClaimsVerifier = new AssertedClaimsVerifier();
-  for (let [claimName, expectedValue] of Object.entries(verifier.claimsToAssert)) {
+  for (let [claimName, expectedValue] of Object.entries(
+    verifier.claimsToAssert
+  )) {
     const operator = assertedClaimsVerifier.extractOperator(claimName);
     if (!assertedClaimsVerifier.isValidOperator(operator)) {
-      throw new Error(`operator: '${operator}' invalid. Supported operators: 'includes'.`);
+      throw new Error(
+        `operator: '${operator}' invalid. Supported operators: 'includes'.`
+      );
     }
     const claim = assertedClaimsVerifier.extractClaim(claimName);
     const actualValue = claims[claim];
-    assertedClaimsVerifier.checkAssertions(operator, claim, expectedValue, actualValue)
+    assertedClaimsVerifier.checkAssertions(
+      operator,
+      claim,
+      expectedValue,
+      actualValue
+    );
   }
   if (assertedClaimsVerifier.errors.length) {
-    throw new Error(assertedClaimsVerifier.errors.join(', '));
+    throw new Error(assertedClaimsVerifier.errors.join(", "));
   }
 }
 
 function verifyAudience(expected, aud) {
-  if( !expected ) {
-    throw new Error('expected audience is required');
+  if (!expected) {
+    throw new Error("expected audience is required");
   }
 
-  if ( Array.isArray(expected) && !expected.includes(aud) ) {
-    throw new Error(`audience claim ${aud} does not match one of the expected audiences: ${ expected.join(', ') }`);
+  if (Array.isArray(expected) && !expected.includes(aud)) {
+    throw new Error(
+      `audience claim ${aud} does not match one of the expected audiences: ${expected.join(
+        ", "
+      )}`
+    );
   }
 
-  if ( !Array.isArray(expected) && aud !== expected ) {
-    throw new Error(`audience claim ${aud} does not match expected audience: ${expected}`);
+  if (!Array.isArray(expected) && aud !== expected) {
+    throw new Error(
+      `audience claim ${aud} does not match expected audience: ${expected}`
+    );
   }
 }
 
 function verifyIssuer(expected, issuer) {
-  if( issuer !== expected ) {
-    throw new Error(`issuer ${issuer} does not match expected issuer: ${expected}`);
+  if (issuer !== expected) {
+    throw new Error(
+      `issuer ${issuer} does not match expected issuer: ${expected}`
+    );
   }
 }
 
-class OktaJwtVerifier {
+class PointblueJwtVerifier {
   constructor(options = {}) {
     // Assert configuration options exist and are well-formed (not necessarily correct!)
     assertIssuer(options.issuer, options.testing);
-    if( options.clientId ) {
+    if (options.clientId) {
       assertClientId(options.clientId);
     }
 
     this.claimsToAssert = options.assertClaims || {};
     this.issuer = options.issuer;
     this.jwksClient = jwksClient({
-      jwksUri: options.issuer + '/v1/keys',
+      jwksUri: options.issuer + "/keys",
       cache: true,
-      cacheMaxAge: options.cacheMaxAge || (60 * 60 * 1000),
+      cacheMaxAge: options.cacheMaxAge || 60 * 60 * 1000,
       cacheMaxEntries: 3,
       jwksRequestsPerMinute: options.jwksRequestsPerMinute || 10,
-      rateLimit: true
+      rateLimit: true,
     });
-    this.verifier = nJwt.createVerifier().setSigningAlgorithm('RS256').withKeyResolver((kid, cb) => {
-      this.jwksClient.getSigningKey(kid, (err, key) => {
-        cb(err, key && (key.publicKey || key.rsaPublicKey));
+    this.verifier = nJwt
+      .createVerifier()
+      .setSigningAlgorithm("RS256")
+      .withKeyResolver((kid, cb) => {
+        this.jwksClient.getSigningKey(kid, (err, key) => {
+          cb(err, key && (key.publicKey || key.rsaPublicKey));
+        });
       });
-    });
   }
 
   async verifyAsPromise(accessTokenString) {
@@ -153,4 +183,4 @@ class OktaJwtVerifier {
   }
 }
 
-module.exports = OktaJwtVerifier;
+module.exports = PointblueJwtVerifier;
