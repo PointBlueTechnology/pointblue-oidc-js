@@ -1,8 +1,11 @@
 {
   "name": "@pointblue/jwt-verifier",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Easily validate Microfocus access tokens",
-  "repository": "https://github.com/PointBlueTechnology/pointblue-oidc-js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PointBlueTechnology/pointblue-oidc-js.git"
+  },
   "homepage": "https://github.com/PointBlueTechnology/pointblue-oidc-js/tree/master/packages/jwt-verifier",
   "main": "lib.js",
   "files": [
@@ -34,7 +37,7 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@okta/configuration-validation": "^0.1.1",
+    "@pointblue/configuration-validation": ">0.0.0",
     "jwks-rsa": "1.11.0",
     "njwt": "^1.0.0"
   },
@@ -47,5 +50,12 @@
     "nock": "^9.0.14",
     "node-fetch": "^2.6.0",
     "timekeeper": "^1.0.0"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/PointBlueTechnology/pointblue-oidc-js/issues"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "author": "jcombs@pointbluetech.com"
 }

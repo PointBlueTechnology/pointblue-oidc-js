@@ -1,14 +1,12 @@
 {
   "name": "@pointblue/configuration-validation",
-  "version": "1.0.0",
+  "version": "1.1.1",
   "description": "Configuration validation support for JavaScript SDKs",
   "main": "./dist/lib.js",
   "types": "./dist/lib.d.ts",
   "files": [
     "dist"
-    
   ],
-  
   "repository": {
     "type": "git",
     "url": "git+https://github.com/PointBlueTechnology/pointblue-oidc-js.git"
@@ -24,9 +22,9 @@
   "bugs": {
     "url": "https://github.com/PointBlueTechnology/pointblue-oidc-js/issues"
   },
-  "homepage": "https://github.com/PointBlueTechnology/pointblue-oidc-js#readme"
-  
-  
-  
-  
+  "homepage": "https://github.com/PointBlueTechnology/pointblue-oidc-js#readme",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "jcombs@pointbluetech.com"
 }
